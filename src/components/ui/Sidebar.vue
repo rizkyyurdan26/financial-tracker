@@ -6,10 +6,10 @@
     // Mobile overlay
     'fixed top-0 left-0 h-dvh md:relative md:h-full',
 
-    // MOBILE → pakai translate
+    // MOBILE 
     isCollapse ? '-translate-x-full md:translate-x-0' : 'translate-x-0',
 
-    // DESKTOP → pakai width (bukan translate)
+    // DESKTOP 
     isCollapse ? 'md:w-24' : 'md:w-64',
   ]"
   >
@@ -49,25 +49,25 @@
           :is-collapse="isCollapse"
           icon="ic:round-dashboard"
           text="Dashboard"
-          href=""
+          href="/"
         />
         <RouterButton
           :is-collapse="isCollapse"
           icon="ic:baseline-call-received"
           text="Income"
-          href="/none"
+          href="/income"
         />
         <RouterButton
           :is-collapse="isCollapse"
           icon="ic:baseline-call-made"
-          text="Outcome"
-          href="/none"
+          text="Espenses"
+          href="/expenses"
         />
         <RouterButton
           :is-collapse="isCollapse"
           icon="ic:outline-analytics"
           text="Analytics"
-          href="/none"
+          href="/analytics"
         />
       </nav>
     </div>
@@ -80,13 +80,13 @@
           :is-collapse="isCollapse"
           icon="ic:baseline-settings"
           text="Settings"
-          href="/none"
+          href="/setting"
         />
         <RouterButton
           :is-collapse="isCollapse"
           icon="ic:baseline-help-outline"
           text="Help"
-          href="/none"
+          href="/help"
         />
       </nav>
 
@@ -112,7 +112,7 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import RouterButton from "../common/RouterButton.vue";
-import CartUser from "../cart/CartUser.vue";
+import CartUser from "../card/CartUser.vue";
 import { ref, onMounted, onUnmounted } from "vue";
 
 // STATE

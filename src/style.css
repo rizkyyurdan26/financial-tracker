@@ -1,9 +1,16 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-html{
+@theme {
+  --color-primary: #0891b2;   /* cyan-600 */
+  --color-secondary: #475569; /* slate-600 */
+  --color-muted: #cbd5e1;     /* slate-300 */
+}
+
+html {
   scroll-behavior: smooth;
 }
 
-:root{
+:root {
   font-family: "Google Sans", sans-serif;
 }
+

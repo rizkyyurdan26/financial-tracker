@@ -7,7 +7,7 @@
          </div>
 
         <!-- Right -->
-         <div class="space-y-2">
+         <div class="space-y-2 text-secondary">
             <h1>Contact</h1>
             <a href="" target="_blank" class="flex gap-2  items-center text-xs hover:text-green-600"> <Icon icon="ic:baseline-whatsapp"/> Send Whatsapp </a href="">
             <a href="" target="_blank" class="flex gap-2  items-center text-xs hover:text-blue-600"> <Icon icon="ic:outline-email"/> Send email </a href="">

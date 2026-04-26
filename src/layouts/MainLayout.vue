@@ -1,12 +1,10 @@
 <template>
   <div class="flex h-screen">
-    
     <!-- Sidebar -->
     <Sidebar />
 
     <!-- Right Area -->
     <div class="flex flex-col flex-1 h-screen">
-
       <!-- Header -->
       <HeaderUi />
 
@@ -17,13 +15,11 @@
 
       <!-- Footer (optional) -->
       <div class="mt-auto">
-         <FooterUi/>
+        <FooterUi />
       </div>
-
     </div>
   </div>
 </template>
-
 
 <script setup>
 import FooterUi from "../components/ui/FooterUi.vue";
