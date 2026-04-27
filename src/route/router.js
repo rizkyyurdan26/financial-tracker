@@ -24,8 +24,8 @@ const routes = [
         component: Income,
       },
       {
-        path: "expenses",
-        name: "expenses",
+        path: "expense",
+        name: "expense",
         component: Expenses,
       },
       {
@@ -46,6 +46,11 @@ const routes = [
       {
         path: "create",
         name: "create",
+        component: Create,
+      },
+      {
+        path: "edit",
+        name: "edit",
         component: Create,
       },
     ],

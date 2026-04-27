@@ -18,7 +18,8 @@
     </div>
 
     <!-- Right -->
-    <div>
+    <div class="flex gap-5 items-center">
+      
       <router-link to="/create">
         <button
           class="bg-cyan-600 text-white font-semibold text-sm py-1 px-5 rounded hover:cursor-pointer hover:scale-105 transform duration-300"
@@ -32,8 +33,11 @@
 
 <script setup>
 import { Icon } from "@iconify/vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import RouterButton from "../common/RouterButton.vue";
+import { useTheme } from "../../compossable/useTheme";
 
 const searchInput = ref("");
+
+
 </script>

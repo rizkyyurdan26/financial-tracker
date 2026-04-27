@@ -7,12 +7,12 @@
     </div>
 
     <!-- Title -->
-    <h1 class="text-2xl font-bold text-secondary">Dashboard</h1>
-    <p class="text-secondary flex items-end gap-1">
+    <h1 class="text-2xl font-bold text-secondary flex items-end gap-1">Dashboard <span
+        ><Icon icon="ic:sharp-bubble-chart" width="32" class="text-primary"
+      /></span></h1>
+    <p class="text-secondary">
       Welcome back, here is your financial reports
-      <span
-        ><Icon icon="ic:sharp-bubble-chart" width="28" class="text-primary"
-      /></span>
+      
     </p>
   </div>
 
@@ -36,8 +36,6 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import CartDashboard from "../components/card/CartDashboard.vue";
-import FinancialChart from "../components/chart/FinancialChart.vue";
-import SpendingChart from "../components/chart/SpendingChart.vue";
 import { onMounted } from "vue";
 import { useTransactionStore } from "../stores/transaction.store";
 import { useDashboardStore } from "../stores/dashboard.store";

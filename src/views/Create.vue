@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col p-6 gap-5">
+  <div class="flex flex-col p-6 gap-5 w-full">
     <p v-if="stores.loadingCreate">Loading...</p>
     <p v-if="stores.error">{{ stores.error }}</p>
 
@@ -41,18 +41,19 @@
         type="submit"
         class="bg-primary text-white font-semibold py-1 px-4 rounded hover:cursor-pointer hover:scale-105 transform duration-300"
       >
-        Create
+        {{ stores.dataEdit ? "Update" : "Create" }}
       </button>
     </form>
   </div>
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import CreateForm from "../components/form/CreateForm.vue";
 import CreateSelect from "../components/form/createSelect.vue";
 import { optionExpense, optionIncome, optionType } from "../stores/optionData";
 import { useTransactionStore } from "../stores/transaction.store";
+import { useRouter } from "vue-router";
 
 const inputAmount = ref("");
 const inputDescription = ref("");
@@ -65,23 +66,15 @@ const dataType = optionType;
 const dataIncome = optionIncome;
 const dataExpense = optionExpense;
 
+const router = useRouter();
+
 const optionCategory = computed(() => {
   if (inputType.value === "income") return dataIncome;
   if (inputType.value === "expense") return dataExpense;
   return [];
 });
 
-watch(
-  () => stores.successCreate,
-  (val) => {
-    if (val) {
-      alert(val);
-      stores.successCreate = "";
-    }
-  }
-);
-
-const handleSubmit = () => {
+const handleSubmit = async () => {
   const payload = {
     type: inputType.value,
     category: inputCategory.value,
@@ -90,13 +83,47 @@ const handleSubmit = () => {
     date: inputDate.value,
   };
 
-  if (confirm("Is Data Ok?")) {
-    stores.createTransaction(payload);
-  } else return;
+  if (stores.dataEdit) {
+    // Edit Mode
+    if (confirm("Is Edit Ok?")) {
+      const idx = stores.dataEdit.id;
+      await stores.editTransaction(idx, payload);
+      if (stores.successEdit) {
+        alert("Edit Successfully ✅");
+        router.push(`/${stores.dataEdit.type}`);
+      }
+    }
+  } else {
+    // Create Mode
+    if (confirm("Is Data Ok?")) {
+      await stores.createTransaction(payload);
 
-  inputType.value = "";
-  inputAmount.value = "";
-  inputDescription.value = "";
-  inputCategory.value = "";
+      if (stores.successCreate) {
+        alert("Created Successfully ✅");
+        router.push(`/${inputType.value}`);
+      }
+
+      inputType.value = "";
+      inputAmount.value = "";
+      inputDescription.value = "";
+      inputCategory.value = "";
+    } else return;
+  }
 };
+
+onMounted(() => {
+  const editData = stores.dataEdit;
+
+  if (editData) {
+    inputType.value = editData.type;
+    inputCategory.value = editData.category;
+    inputAmount.value = editData.amount;
+    inputDescription.value = editData.description;
+    inputDate.value = editData.date;
+  }
+});
+
+onUnmounted(() => {
+  stores.dataEdit = null;
+});
 </script>

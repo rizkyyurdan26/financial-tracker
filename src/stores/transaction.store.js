@@ -8,7 +8,14 @@ export const useTransactionStore = defineStore("transaction", () => {
   const error = ref(null);
 
   const loadingCreate = ref(false);
-  const successCreate = ref("");
+  const successCreate = ref(false);
+
+  const loadingDelete = ref(false);
+  const successDelete = ref(false);
+
+  const loadingEdit = ref(false)
+  const successEdit = ref(false)
+  const dataEdit = ref(null)
 
   async function fetchTransactions() {
     loading.value = true;
@@ -25,15 +32,17 @@ export const useTransactionStore = defineStore("transaction", () => {
 
   async function createTransaction(payload) {
     loadingCreate.value = true;
+    successCreate.value = false
     error.value = null;
 
     try {
       const data = await transactionService.create(payload);
       transactions.value.unshift(data);
-      successCreate.value = "Created successfully ✅";
+      successCreate.value = true;
       return data;
     } catch (err) {
-      console.log(err.response.data);
+      successCreate.value = false;
+      // console.log(err.response.data);
       error.value =
         err.response?.data?.error_description ||
         err.response?.data?.message ||
@@ -43,13 +52,60 @@ export const useTransactionStore = defineStore("transaction", () => {
     }
   }
 
+  async function deleteTransaction(id) {
+    loadingDelete.value = true;
+    successDelete.value = false
+    error.value = null;
+
+    try {
+      await transactionService.delete(id);
+
+      transactions.value = transactions.value.filter((p) => p.id !== id);
+      successDelete.value = true;
+    } catch (err) {
+      successDelete.value = false;
+      error.value = err.response?.data?.message || "Delete Failed";
+      // console.log(err);
+    } finally {
+      loadingDelete.value = false;
+    }
+  }
+
+  async function editTransaction(id, payload){
+    loadingEdit.value = true
+    successEdit.value = false
+    error.value = null
+
+    try{
+      const data = await transactionService.edit(id, payload)
+      const idx = transactions.value.findIndex(p => p.id === id)
+
+      if (idx !== -1){
+        transactions.value[idx] = {...transactions.value[idx], ...payload}
+        successEdit.value = true
+      }
+      return data
+    } catch(err){
+      error.value = err.response?.data?.messege || 'Edit Failed'
+    } finally {
+      loadingEdit.value = false
+    }
+  }
+
   return {
     transactions,
     loading,
     error,
     loadingCreate,
     successCreate,
+    loadingDelete,
+    successDelete,
+    loadingEdit,
+    successEdit,
+    dataEdit,
     fetchTransactions,
     createTransaction,
+    deleteTransaction,
+    editTransaction,
   };
 });

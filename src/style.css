@@ -1,10 +1,25 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #0891b2;   /* cyan-600 */
-  --color-secondary: #475569; /* slate-600 */
-  --color-muted: #cbd5e1;     /* slate-300 */
+  /* Definisikan warna dasar */
+  --color-primary: #0891b2;
+  --color-secondary: #475569;
+  --color-muted: #cbd5e1;
+
+  /* Buat variabel warna dinamis */
+  --color-main-bg: white;
+  --color-main-text: #1e293b; /* slate-800 */
+  --color-card-bg: #f8fafc; /* slate-50 */
 }
+
+/* Logic otomatis saat class .dark aktif di root (html) */
+.dark {
+  --color-main-bg: #0f172a; /* slate-900 */
+  --color-main-text: #f1f5f9; /* slate-100 */
+  --color-card-bg: #1e293b; /* slate-800 */
+}
+
+@variant dark (&:where(.dark, .dark *));
 
 html {
   scroll-behavior: smooth;
@@ -13,4 +28,3 @@ html {
 :root {
   font-family: "Google Sans", sans-serif;
 }
-

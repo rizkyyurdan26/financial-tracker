@@ -1,22 +1,14 @@
 <template>
-  <div class="flex h-screen">
-    <!-- Sidebar -->
-    <Sidebar />
+  <div class="flex h-screen overflow-hidden"> <Sidebar />
 
-    <!-- Right Area -->
-    <div class="flex flex-col flex-1 h-screen">
-      <!-- Header -->
+    <div class="flex flex-col flex-1 min-w-0 h-screen"> 
       <HeaderUi />
 
-      <!-- Content -->
-      <main class="overflow-auto p-4">
+      <main class="flex-1 overflow-y-auto p-4 bg-slate-50">
         <router-view />
       </main>
 
-      <!-- Footer (optional) -->
-      <div class="mt-auto">
-        <FooterUi />
-      </div>
+      <FooterUi />
     </div>
   </div>
 </template>

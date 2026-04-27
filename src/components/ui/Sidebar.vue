@@ -44,7 +44,7 @@
     <!-- Middle -->
     <div class="p-6">
       <!-- Main Menu -->
-      <nav class="space-y-2">
+      <nav class="space-y-2" @click="autoCloseMobile">
         <RouterButton
           :is-collapse="isCollapse"
           icon="ic:round-dashboard"
@@ -61,11 +61,11 @@
           :is-collapse="isCollapse"
           icon="ic:baseline-call-made"
           text="Espenses"
-          href="/expenses"
+          href="/expense"
         />
         <RouterButton
           :is-collapse="isCollapse"
-          icon="ic:outline-analytics"
+          icon="ic:sharp-pie-chart"
           text="Analytics"
           href="/analytics"
         />
@@ -75,7 +75,7 @@
     <!-- Bottom -->
     <div class="flex flex-col mt-auto">
       <!-- Other Menu -->
-      <nav class="space-y-2 p-6">
+      <nav class="space-y-2 p-6" @click="autoCloseMobile">
         <RouterButton
           :is-collapse="isCollapse"
           icon="ic:baseline-settings"
@@ -120,8 +120,14 @@ const isCollapse = ref(false);
 
 // RESPONSIVE AUTO COLLAPSE
 const handleResize = () => {
-  isCollapse.value = window.innerWidth < 640;
+  isCollapse.value = window.innerWidth < 768;
 };
+
+const autoCloseMobile = () => {
+  if (window.innerWidth < 768){
+    isCollapse.value = true
+  }
+}
 
 onMounted(() => {
   handleResize();
