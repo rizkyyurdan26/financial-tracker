@@ -6,15 +6,15 @@
     ]"
   >
     <div class="space-y-2">
-      <h1 class="text-secondary">{{ text }}</h1>
-      <p class="text-xl font-bold">{{ format(amount) }}</p>
-      <p
+      <h1 class="text-secondary">{{ text }} <span class="text-xs">{{ span }}</span></h1>
+      <p class="text-xl font-bold">{{ currency.format(amount) }}</p>
+      <p v-if="percent != null"
         :class="[
           'text-xs font-medium',
           percent >= 0 ? 'text-green-600' : 'text-red-600',
         ]"
       >
-        {{ percent >= 0 ? '+' : '' }}{{ percent }}% from last month
+        {{ percent >= 0 ? "+" : "" }}{{ percent }}% from last month
       </p>
     </div>
 
@@ -28,15 +28,19 @@
 
 <script setup>
 import { Icon } from "@iconify/vue";
-import { useCurrency } from "../../compossable/useCurrency";
+import { useCurrencyStore } from "../../stores/currency.stores";
 
-const {format} = useCurrency()
+const currency = useCurrencyStore()
 
 const props = defineProps({
   iconClass: String,
   icon: String,
   text: String,
+  span: String,
   amount: Number,
-  percent: Number,
+  percent: {
+    type: Number,
+    default: null
+  },
 });
 </script>

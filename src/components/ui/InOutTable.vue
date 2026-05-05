@@ -36,7 +36,7 @@
               item.type === 'income' ? 'text-green-600' : 'text-red-600',
             ]"
           >
-            {{ format(item.amount) }}
+            {{ currency.format(Number(item.amount)) }}
           </td>
           <td class="p-3">{{ item.description }}</td>
           <td class="p-3">{{ item.date }}</td>
@@ -63,9 +63,9 @@
 </template>
 
 <script setup>
-import { useCurrency } from "../../compossable/useCurrency";
+import { useCurrencyStore } from "../../stores/currency.stores";
 
-const { format } = useCurrency();
+const currency = useCurrencyStore()
 
 defineProps({
   items: {

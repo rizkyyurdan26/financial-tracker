@@ -1,35 +1,40 @@
 <template>
-  <div class="px-5 mb-5">
+  <div class="px-5 mb-5 h-full flex flex-col">
+    <!-- Title -->
+    <h1 class="text-2xl font-bold text-secondary flex items-end gap-1">
+      Dashboard
+      <span
+        ><Icon icon="ic:sharp-bubble-chart" width="32" class="text-primary"
+      /></span>
+    </h1>
+    <p class="text-secondary">Welcome back, here is your financial reports</p>
+
     <!-- Loading / Error -->
     <div>
-      <p v-if="store.loading" class="text-secondary">Loading...</p>
-      <p v-if="store.error" class="text-secondary">{{ store.error }}</p>
+      <p v-if="store.loading" class="text-secondary text-center">Loading...</p>
+      <p v-if="store.error" class="text-red-500 text-center">Sorry, something error</p>
     </div>
 
-    <!-- Title -->
-    <h1 class="text-2xl font-bold text-secondary flex items-end gap-1">Dashboard <span
-        ><Icon icon="ic:sharp-bubble-chart" width="32" class="text-primary"
-      /></span></h1>
-    <p class="text-secondary">
-      Welcome back, here is your financial reports
-      
-    </p>
-  </div>
+    <!-- Content -->
 
-  <!-- Content -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 px-5">
-    <CartDashboard
-      v-for="item in store.stats"
-      :key="item.id"
-      :text="item.text"
-      :icon="item.icon"
-      :icon-class="item.iconClass"
-      :amount="item.amount"
-      :percent="item.percent"
-    />
+    <div v-if="!store.loading && !store.error">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
+        <CartDashboard
+          v-for="item in dashStore.allData"
+          :key="item.id"
+          :text="item.text"
+          :span="item.span"
+          :icon="item.icon"
+          :icon-class="item.iconClass"
+          :amount="item.amount"
+          :percent="item.percent"
+        />
+      </div>
 
-    <!-- <FinancialChart />
-    <SpendingChart /> -->
+      <div class="mt-5">
+        <BudgetDashboard />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -39,11 +44,14 @@ import CartDashboard from "../components/card/CartDashboard.vue";
 import { onMounted } from "vue";
 import { useTransactionStore } from "../stores/transaction.store";
 import { useDashboardStore } from "../stores/dashboard.store";
+import ComparisonChart from "../components/chart/comparisonChart.vue";
+import BudgetDashboard from "../components/chart/BudgetDashboard.vue";
 
-const fetching = useTransactionStore();
-const store = useDashboardStore()
+const store = useTransactionStore();
+const dashStore = useDashboardStore();
 
 onMounted(async () => {
-  await fetching.fetchTransactions();
+  await store.fetchTransactions();
+  // console.log(dashStore.totalBalance)
 });
 </script>

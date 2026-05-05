@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-white p-5 rounded-2xl shadow space-y-4">
+  <div class="bg-white p-5 rounded-2xl shadow space-y-4  ">
     <!-- Title -->
-    <h2 class="text-sm font-semibold text-secondary">Available Budget</h2>
+    <h2 class="text-lg font-semibold  text-secondary">Available Budget (This Month)</h2>
 
     <!-- Info -->
     <div class="flex justify-between text-sm text-slate-500">
@@ -27,7 +27,7 @@
     </div>
 
     <!-- Remaining money -->
-    <p class="text-md font-light text-center text-secondary">
+    <p class="text-md text-center text-secondary">
       Remaining: {{ currency.format(remainingMoney) }}
     </p>
 
@@ -35,7 +35,7 @@
     <div class="flex justify-end items-center gap-3 text-sm">
       <div class="flex items-center gap-1">
         <div class="w-2 h-2 rounded-full bg-green-500"></div>
-        <span class="text-slate-400">> 50%</span>
+        <span class="text-slate-400"> > 50%</span>
       </div>
 
       <div class="flex items-center gap-1">
@@ -45,7 +45,7 @@
 
       <div class="flex items-center gap-1">
         <div class="w-2 h-2 rounded-full bg-red-500"></div>
-        <span class="text-slate-400">< 25%</span>
+        <span class="text-slate-400"> < 25%</span>
       </div>
     </div>
   </div>
@@ -53,25 +53,35 @@
 
 <script setup>
 import { computed } from "vue";
-import { useFilterStore } from "../../stores/filter.store"; 
+import { useTransactionStore } from "../../stores/transaction.store"; 
 import { useCurrencyStore } from "../../stores/currency.stores";
 
-const filterStore = useFilterStore(); 
 const currency = useCurrencyStore()
+const store = useTransactionStore();
+
+const now = new Date();
+const currentMonth = now.getMonth();
+const currentYear = now.getFullYear();
+
+const thisMonthData = computed(() => {
+  return store.transactions.filter((t) => {
+    if (!t.date) return false; 
+    const d = new Date(t.date);
+    return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+  });
+});
 
 const income = computed(() => {
-  return filterStore.filtered
+  return thisMonthData.value
     .filter((t) => t.type?.toLowerCase() === "income")
     .reduce((a, b) => a + Number(b.amount || 0), 0);
 });
 
-
 const expense = computed(() => {
-  return filterStore.filtered
+  return thisMonthData.value
     .filter((t) => t.type?.toLowerCase() === "expense")
     .reduce((a, b) => a + Number(b.amount || 0), 0);
 });
-
 
 const remainingPercent = computed(() => {
   if (!income.value) return 0;
@@ -81,7 +91,6 @@ const remainingPercent = computed(() => {
 const remainingMoney = computed(() => {
   return income.value - expense.value;
 });
-
 
 const barGradient = computed(() => {
   if (remainingPercent.value > 50)

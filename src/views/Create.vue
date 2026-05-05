@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col p-6 gap-5 w-full">
-    <p v-if="stores.loadingCreate">Loading...</p>
-    <p v-if="stores.error">{{ stores.error }}</p>
+    <p v-if="stores.loadingCreate" class="text-secondary text-center">Loading...</p>
+    <p v-if="stores.error" class="text-red-500 text-center">{{ stores.error }}</p>
 
     <h1 class="text-secondary text-xl font-semibold">Add Transaction</h1>
 

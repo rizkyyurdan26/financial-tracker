@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-sm font-semibold text-secondary mb-5">Transaction Reports</h2>
+    <h2 class="text-xl font-semibold text-secondary mb-5 text-center mt-5">Transaction Reports</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Income -->
       <div class="bg-white p-4 rounded-2xl shadow">
@@ -13,9 +13,11 @@
             :options="options"
             :plugins="[labelPlugin]"
           />
+          
+          <p v-else class="text-center text-slate-400 mt-20 text-sm">Data not found</p>
         </div>
 
-        <div class="mt-3 max-h-32 overflow-y-auto text-sm space-y-2">
+        <div v-if="income.legend.length" class="mt-3 max-h-64 overflow-y-auto text-sm space-y-2">
           <div v-for="item in income.legend" :key="item.label">
             <div class="flex justify-between mb-1">
               <span>{{ item.label }}</span>
@@ -46,9 +48,11 @@
             :options="options"
             :plugins="[labelPlugin]"
           />
+          
+          <p v-else class="text-center text-slate-400 mt-20 text-sm">Data not found</p>
         </div>
 
-        <div class="mt-3 max-h-32 overflow-y-auto text-sm space-y-2">
+        <div v-if="expense.legend.length" class="mt-3 max-h-64 overflow-y-auto text-sm space-y-2">
           <div v-for="item in expense.legend" :key="item.label">
             <div class="flex justify-between mb-1">
               <span>{{ item.label }}</span>
@@ -75,14 +79,16 @@
 import { computed, onMounted } from "vue";
 import { Pie } from "vue-chartjs";
 import { useTransactionStore } from "../../stores/transaction.store";
+import { useFilterStore } from "../../stores/filter.store"; // 1. Import Store Filter
 
 import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip);
 
 const store = useTransactionStore();
+const filterStore = useFilterStore(); // 2. Inisialisasi
 
-// FLEXIBLE COLOR GENERATOR (ini kunci utama)
+// FLEXIBLE COLOR GENERATOR
 const generateColors = (count, baseHue) => {
   return Array.from({ length: count }, (_, i) => {
     const hue = (baseHue + i * 35) % 360;
@@ -113,13 +119,15 @@ const labelPlugin = {
   },
 };
 
-// 🔥 generator utama (FIX warna di sini)
+// 🔥 generator utama (FIX: Pakai data dari filterStore)
 const generate = (type) => {
   const map = {};
 
-  store.transactions.forEach((t) => {
-    if (t.type !== type) return;
-    map[t.category] = (map[t.category] || 0) + +t.amount;
+  // 3. Ubah bagian ini jadi filterStore.filtered
+  filterStore.filtered.forEach((t) => {
+    // Pakai toLowerCase() buat jaga-jaga kalau tulisan di database beda huruf besar/kecil
+    if (t.type?.toLowerCase() !== type.toLowerCase()) return;
+    map[t.category] = (map[t.category] || 0) + Number(t.amount);
   });
 
   const entries = Object.entries(map).sort((a, b) => b[1] - a[1]);
@@ -133,7 +141,7 @@ const generate = (type) => {
   //  warna beda base
   const colors = generateColors(
     entries.length,
-    type === "income" ? 130 : 5, // hijau vs orange
+    type === "income" ? 130 : 5 // hijau vs orange
   );
 
   const legend = entries.map(([label, val], i) => ({
@@ -158,7 +166,6 @@ const generate = (type) => {
   };
 };
 
-// ✅ pakai ini (FIX)
 const income = computed(() => generate("income"));
 const expense = computed(() => generate("expense"));
 

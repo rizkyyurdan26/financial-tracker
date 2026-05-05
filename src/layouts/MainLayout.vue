@@ -1,11 +1,12 @@
 <template>
-  <div class="flex h-screen overflow-hidden"> <Sidebar />
+  <div class="flex h-[100dvh] overflow-hidden">
+    <Sidebar />
 
-    <div class="flex flex-col flex-1 min-w-0 h-screen"> 
+    <div class="flex flex-col flex-1 min-w-0 h-screen">
       <HeaderUi />
 
-      <main class="flex-1 overflow-y-auto p-4 bg-slate-50">
-        <router-view />
+      <main class="flex flex-col flex-1 overflow-y-auto py-4 bg-slate-50">
+        <router-view class="flex-1" />
       </main>
 
       <FooterUi />

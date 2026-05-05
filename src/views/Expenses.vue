@@ -3,29 +3,39 @@
     <h1 class="font-bold text-xl text-secondary flex items-end gap-2">Expanses<Icon icon="mdi:cash-multiple" width="32" class="text-red-400 "/></h1>
   
     <p v-if="stores.loading" class="text-secondary text-center">Loading Data...</p>
-    <p v-if="stores.error">{{ stores.error }}</p>
+    <p v-if="stores.error" class="text-red-500 text-center">Failed to Get Data</p>
 
-    <InOutTable :items="dataIncome" @delete="handleDelete" @edit="handleEdit"/>
+    <div v-if="!stores.error && !stores.loading" class="space-y-5">
+      <div class="space-y-1">
+        <p class="text-secondary">Filter:</p>
+        <FilterAnalytic
+          v-model:start="filterStore.startDate"
+          v-model:end="filterStore.endDate"
+        />
+      </div>
+      <InOutTable :items="dataExpense" @delete="handleDelete" @edit="handleEdit" />
+    </div>
   </div>
 </template>
 
 <script setup>
 import { computed, onMounted } from "vue";
 import { useTransactionStore } from "../stores/transaction.store";
-import { useCurrency } from "../compossable/useCurrency";
 import InOutTable from "../components/ui/InOutTable.vue";
 import { useRouter } from "vue-router";
 import { Icon } from "@iconify/vue";
+import { useFilterStore } from "../stores/filter.store";
+import FilterAnalytic from "../components/filter/FilterAnalytic.vue";
 
-
-const { format } = useCurrency();
 const stores = useTransactionStore();
-
+const filterStore = useFilterStore()
 const router = useRouter()
 
 
-const dataIncome = computed(() =>
-  stores.transactions.filter((p) => p.type === "expense"),
+const dataExpense = computed(() =>
+  filterStore.filtered
+    .filter((p) => p.type?.toLowerCase() === "income") 
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
 );
 
 const handleDelete = async (id) => {
