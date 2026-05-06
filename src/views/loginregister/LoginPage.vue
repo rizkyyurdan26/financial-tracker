@@ -6,6 +6,14 @@
     <div class="bg-white p-10 rounded-xl space-y-5 m-5 md:max-w-sm w-full">
       <h1 class="font-bold text-2xl mb-5">Login</h1>
 
+      <!-- Error Message -->
+      <div
+        v-if="authStore.error"
+        class="bg-red-100 text-red-600 p-3 rounded-lg text-sm text-center font-medium mb-4"
+      >
+        {{ authStore.error }}
+      </div>
+
       <!-- Email -->
       <div class="flex flex-col gap-2 text-secondary">
         <label>Email</label>
@@ -45,18 +53,14 @@
 
       <!-- Terms & Polcy -->
       <div class="flex gap-2 items-center">
-        <input
-          type="checkbox"
-          v-model="isChecked"
-          class="cursor-pointer"
-        />
+        <input type="checkbox" v-model="isChecked" class="cursor-pointer" />
         <p class="text-xs text-secondary">Agree with terms and policy</p>
       </div>
 
       <!-- Button -->
       <button
         type="submit"
-        :disabled="!isChecked"
+        :disabled="!isChecked || authStore.loading"
         :class="[
           'w-full text-white p-2 rounded-lg font-semibold duration-300',
           isChecked
@@ -64,12 +68,20 @@
             : 'bg-slate-400 cursor-not-allowed',
         ]"
       >
-        Login
+        {{ authStore.loading ? "Loading..." : "Login" }}
       </button>
 
       <!-- To Register -->
-       <p class="text-center text-secondary">Don't have account? <span class="text-blue-500 underline"><a href="/register">Register</a></span></p>
-
+      <p class="text-center text-secondary">
+        Don't have account?
+        <span class="text-blue-500 underline"
+          ><router-link to="/register">Register</router-link></span
+        >
+      </p>
+      <!-- Forgot Password -->
+      <p class="text-center text-blue-400 text-xs -mt-4">
+        <router-link to="/forgot-password">Forgot password?</router-link>
+      </p>
     </div>
   </form>
 </template>
@@ -77,16 +89,23 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "../../stores/auth.store";
 
 const inputEmail = ref("");
 const inputPassword = ref("");
 const isChecked = ref(false);
 const isShow = ref(false);
 
-function handleLogin() {
-    const payload = {
-        email: inputEmail.value,
-        password: inputPassword.value
-    }
+const router = useRouter();
+const authStore = useAuthStore();
+
+async function handleLogin() {
+  try {
+    await authStore.login(inputEmail.value, inputPassword.value);
+    router.push({ name: "dashboard" });
+  } catch (error) {
+    console.error("Gagal Login", error);
+  }
 }
 </script>

@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { transactionService } from "../services/transaction.services";
+import { dummyData } from "./dummyData";
 
 export const useTransactionStore = defineStore("transaction", () => {
   const transactions = ref([]);
@@ -13,13 +14,22 @@ export const useTransactionStore = defineStore("transaction", () => {
   const loadingDelete = ref(false);
   const successDelete = ref(false);
 
-  const loadingEdit = ref(false)
-  const successEdit = ref(false)
-  const dataEdit = ref(null)
+  const loadingEdit = ref(false);
+  const successEdit = ref(false);
+  const dataEdit = ref(null);
 
   async function fetchTransactions() {
     loading.value = true;
     error.value = null;
+
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      transactions.value = dummyData;
+      loading.value = false;
+      return;
+    }
+
     try {
       const data = await transactionService.getAll();
       transactions.value = data;
@@ -32,7 +42,7 @@ export const useTransactionStore = defineStore("transaction", () => {
 
   async function createTransaction(payload) {
     loadingCreate.value = true;
-    successCreate.value = false
+    successCreate.value = false;
     error.value = null;
 
     try {
@@ -54,7 +64,7 @@ export const useTransactionStore = defineStore("transaction", () => {
 
   async function deleteTransaction(id) {
     loadingDelete.value = true;
-    successDelete.value = false
+    successDelete.value = false;
     error.value = null;
 
     try {
@@ -71,24 +81,24 @@ export const useTransactionStore = defineStore("transaction", () => {
     }
   }
 
-  async function editTransaction(id, payload){
-    loadingEdit.value = true
-    successEdit.value = false
-    error.value = null
+  async function editTransaction(id, payload) {
+    loadingEdit.value = true;
+    successEdit.value = false;
+    error.value = null;
 
-    try{
-      const data = await transactionService.edit(id, payload)
-      const idx = transactions.value.findIndex(p => p.id === id)
+    try {
+      const data = await transactionService.edit(id, payload);
+      const idx = transactions.value.findIndex((p) => p.id === id);
 
-      if (idx !== -1){
-        transactions.value[idx] = {...transactions.value[idx], ...payload}
-        successEdit.value = true
+      if (idx !== -1) {
+        transactions.value[idx] = { ...transactions.value[idx], ...payload };
+        successEdit.value = true;
       }
-      return data
-    } catch(err){
-      error.value = err.response?.data?.messege || 'Edit Failed'
+      return data;
+    } catch (err) {
+      error.value = err.response?.data?.messege || "Edit Failed";
     } finally {
-      loadingEdit.value = false
+      loadingEdit.value = false;
     }
   }
 

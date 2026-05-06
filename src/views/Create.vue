@@ -54,6 +54,7 @@ import CreateSelect from "../components/form/createSelect.vue";
 import { optionExpense, optionIncome, optionType } from "../stores/optionData";
 import { useTransactionStore } from "../stores/transaction.store";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "../stores/auth.store";
 
 const inputAmount = ref("");
 const inputDescription = ref("");
@@ -67,6 +68,7 @@ const dataIncome = optionIncome;
 const dataExpense = optionExpense;
 
 const router = useRouter();
+const authStore = useAuthStore()
 
 const optionCategory = computed(() => {
   if (inputType.value === "income") return dataIncome;
@@ -81,6 +83,7 @@ const handleSubmit = async () => {
     amount: Number(inputAmount.value),
     description: inputDescription.value,
     date: inputDate.value,
+    user_id: authStore.user.id
   };
 
   if (stores.dataEdit) {

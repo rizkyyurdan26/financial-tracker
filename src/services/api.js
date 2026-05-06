@@ -7,10 +7,27 @@ const api = axios.create({
   baseURL: `${BASE_URL}/rest/v1`,
   headers: {
     apikey: ANON_KEY,
-    Authorization: `Bearer ${ANON_KEY}`,
+    // Authorization: `Bearer ${ANON_KEY}`,
     "Content-Type": "application/json",
     Prefer: "return=representation",
   },
 });
+
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('access_token')
+
+    if (token){
+      config.headers.Authorization = `Bearer ${token}`
+    } else {
+      config.headers.Authorization = `Bearer ${ANON_KEY}`
+    }
+
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
 
 export default api;

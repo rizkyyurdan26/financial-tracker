@@ -15,7 +15,15 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
 import FooterUi from "../components/ui/FooterUi.vue";
 import HeaderUi from "../components/ui/HeaderUi.vue";
 import Sidebar from "../components/ui/Sidebar.vue";
+import { useTransactionStore } from "../stores/transaction.store";
+
+const store = useTransactionStore()
+
+onMounted(async () => {
+  await store.fetchTransactions()
+})
 </script>

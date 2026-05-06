@@ -8,9 +8,9 @@
       <p class="text-xs truncate ">{{ email }}</p>
     </div>
     
-    <a :href="href" class="shrink-0">
+    <button @click.prevent="$emit('logout')" class="shrink-0 cursor-pointer hover:text-red-500 duration-300">
       <Icon :icon="logOutIcon" width="20" />
-    </a>
+    </button>
 
   </div>
 </template>
@@ -20,10 +20,11 @@ import { Icon } from '@iconify/vue';
 
 defineProps({
   text: String,
-  href: String,
   email: String,
   profileIcon: String,
   logOutIcon: String,
   isCollapse: Boolean,
 });
+
+defineEmits(['logout']);
 </script>

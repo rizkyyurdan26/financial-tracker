@@ -6,6 +6,23 @@
     <div class="bg-white p-10 rounded-xl space-y-5 m-5 md:max-w-sm w-full">
       <h1 class="font-bold text-2xl mb-5">Register</h1>
 
+      <!-- Alert Error dari Supabase (Baru ditambahkan) -->
+      <div v-if="authStore.error" class="bg-red-100 text-red-600 p-3 rounded-lg text-sm text-center font-medium">
+        {{ authStore.error }}
+      </div>
+
+      <!-- Username -->
+      <div class="flex flex-col gap-2">
+        <label>Username</label>
+        <input
+          type="text"
+          placeholder="Username"
+          required
+          v-model="inputUsername"
+          class="border border-slate-400 p-2 rounded-lg w-full"
+        />
+      </div>
+
       <!-- Email -->
       <div class="flex flex-col gap-2">
         <label>Email</label>
@@ -77,21 +94,23 @@
       <!-- Submit -->
       <button
         type="submit"
-        :disabled="!isChecked"
+        :disabled="!isChecked || authStore.loading"
         :class="[
-          'w-full text-white p-2 rounded-lg font-semibold duration-300',
-          isChecked
+          'w-full text-white p-2 rounded-lg font-semibold duration-300 flex justify-center',
+          isChecked && !authStore.loading
             ? 'bg-cyan-600 hover:scale-105  cursor-pointer'
             : 'bg-slate-400 cursor-not-allowed',
         ]"
       >
-        Register
+        <span v-if="authStore.loading">Loading...</span>
+        <span v-else>Register</span>
       </button>
 
       <!-- Already Account -->
       <p class="text-center text-secondary">
         Already have an account?
-        <span class="text-blue-500 underline"><a href="login">Login</a></span>
+        <!-- Pakai router-link biar gak refresh halaman -->
+        <router-link to="/login" class="text-blue-500 underline">Login</router-link>
       </p>
     </div>
   </form>
@@ -100,20 +119,35 @@
 <script setup>
 import { Icon } from "@iconify/vue";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "../../stores/auth.store";
+
+
+// Inisialisasi
+const router = useRouter();
+const authStore = useAuthStore();
 
 const inputEmail = ref("");
 const inputPassword = ref("");
 const repeatPassword = ref("");
+const inputUsername = ref("");
 const isShow = ref(false);
 const isChecked = ref(false);
 
-function handleRegister() {
-  const payload = {
-    email: inputEmail.value,
-    password: inputPassword.value,
-  };
+async function handleRegister() {
+  // Validasi lokal dulu
+  if (inputPassword.value !== repeatPassword.value) {
+    return alert("Password dan Repeat Password harus sama!");
+  }
 
-  if (inputPassword.value !== repeatPassword.value)
-    return alert("Please repeat your same password");
+  try {
+    // Panggil fungsi register dari store, masukkan 3 parameter
+    await authStore.register(inputEmail.value, inputPassword.value, inputUsername.value);
+    
+    alert("Register berhasil! Silakan login.");
+    router.push('/login');
+  } catch (error) {
+    console.error("Gagal register:", error);
+  }
 }
 </script>

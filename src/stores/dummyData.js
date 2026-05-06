@@ -1,35 +1,62 @@
 // src/data/dummy.js
+
+const now = new Date();
+const currentMonth = now.getMonth();
+const currentYear = now.getFullYear();
+
+// Tanggal bulan lalu untuk simulasi persentase naik/turun
+const lastMonthDate = new Date(currentYear, currentMonth - 1, 1);
+
 export const dummyData = [
+  // --- DATA BULAN INI ---
   {
-    id: 1,
-    text: "Total Balance",
-    current_month: 24563.00,
-    last_month: 23950.00,
-    icon: "ic:outline-account-balance-wallet",
-    iconClass: "bg-emerald-100 text-emerald-600",
+    id: "d1",
+    type: "income",
+    category: "Salary",
+    amount: 15000000,
+    description: "Gaji Utama",
+    date: new Date(currentYear, currentMonth, 15).toISOString()
   },
   {
-    id: 2,
-    text: "Income",
-    current_month: 8350.00,
-    last_month: 7435.00,
-    icon: "ic:baseline-trending-up",
-    iconClass: "bg-green-100 text-green-600",
+    id: "d2",
+    type: "expense",
+    category: "Food",
+    amount: 2000000,
+    description: "Makan bulanan",
+    date: new Date(currentYear, currentMonth, 10).toISOString()
   },
   {
-    id: 3,
-    text: "Expenses",
-    current_month: 3280.50,
-    last_month: 3424.00, // Bulan lalu lebih besar, berarti pengeluaran bulan ini turun (bagus)
-    icon: "ic:baseline-trending-down",
-    iconClass: "bg-red-100 text-red-600",
+    id: "d3",
+    type: "expense",
+    category: "Rent",
+    amount: 1200000,
+    description: "Bayar Kost",
+    date: new Date(currentYear, currentMonth, 5).toISOString()
+  },
+
+  // --- DATA BULAN LALU (Agar persentase dashboard tidak 0%) ---
+  {
+    id: "d4",
+    type: "income",
+    category: "Salary",
+    amount: 12000000,
+    description: "Gaji Bulan Lalu",
+    date: lastMonthDate.toISOString()
   },
   {
-    id: 4,
-    text: "Savings",
-    current_month: 5069.50,
-    last_month: 4690.00,
-    icon: "material-symbols:account-balance-rounded",
-    iconClass: "bg-blue-100 text-blue-600",
+    id: "d5",
+    type: "expense",
+    category: "Food",
+    amount: 2500000,
+    description: "Makan Bulan Lalu",
+    date: lastMonthDate.toISOString()
+  },
+  {
+    id: "d6",
+    type: "income",
+    category: "Bonus",
+    amount: 2000000,
+    description: "Bonus Project",
+    date: lastMonthDate.toISOString()
   }
 ];

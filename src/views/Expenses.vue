@@ -34,7 +34,7 @@ const router = useRouter()
 
 const dataExpense = computed(() =>
   filterStore.filtered
-    .filter((p) => p.type?.toLowerCase() === "income") 
+    .filter((p) => p.type?.toLowerCase() === "expense") 
     .sort((a, b) => new Date(b.date) - new Date(a.date))
 );
 
