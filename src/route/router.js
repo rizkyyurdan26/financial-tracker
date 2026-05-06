@@ -7,8 +7,22 @@ import Analytics from "../views/Analytics.vue";
 import Settings from "../views/Settings.vue";
 import Help from "../views/Help.vue";
 import Create from "../views/Create.vue";
+import LoginPage from "../views/loginregister/LoginPage.vue";
+import RegisterPage from "../views/loginregister/RegisterPage.vue";
 
 const routes = [
+  {
+    path:'/login',
+    name: 'login',
+    component: LoginPage
+
+  },
+  {
+    path:'/register',
+    name: 'register',
+    component: RegisterPage
+
+  },
   {
     path: "/",
     component: MainLayout,
