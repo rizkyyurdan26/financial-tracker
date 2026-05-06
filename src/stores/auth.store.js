@@ -11,6 +11,7 @@ export const useAuthStore = defineStore("auth", () => {
   const token = ref(localStorage.getItem("access_token") || null);
   const loading = ref(false);
   const error = ref(null);
+  const errorCode = ref(null);
 
   // Register
   async function register(email, password, username) {
@@ -105,7 +106,7 @@ export const useAuthStore = defineStore("auth", () => {
         },
       );
     } catch (err) {
-      error.value = err.response?.data?.msg || "Gagal mengirim email reset";
+      error.value = err.response?.data?.msg || "Failed to send recovery link";
       throw err;
     } finally {
       loading.value = false;
@@ -115,6 +116,7 @@ export const useAuthStore = defineStore("auth", () => {
 async function updatePassword(newPassword, recoveryToken) {
   loading.value = true;
   error.value = null;
+  errorCode.value = null
 
   try {
     await axios.put(
@@ -129,14 +131,15 @@ async function updatePassword(newPassword, recoveryToken) {
       }
     );
   } catch (err) {
-    // Tangkap pesan error spesifik dari Supabase
     const supabaseError = err.response?.data?.msg || err.response?.data?.message;
     
-    // Cek jika errornya karena password sama (biasanya mengandung kata 'new password' atau 'different')
+
     if (supabaseError?.includes("new password") && supabaseError?.includes("different")) {
-      error.value = "Password baru tidak boleh sama dengan password lama!";
+      error.value = "Please use different password from old password";
+      errorCode.value = "SAME_PASSWORD";
     } else {
-      error.value = supabaseError || "Gagal update password.";
+      error.value = supabaseError || "Failed to update password";
+      errorCode.value = null;
     }
     
     console.dir(err.response?.data);
@@ -152,6 +155,7 @@ async function updatePassword(newPassword, recoveryToken) {
     token,
     loading,
     error,
+    errorCode,
     register,
     login,
     logout,

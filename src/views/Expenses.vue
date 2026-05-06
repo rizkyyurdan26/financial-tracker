@@ -6,14 +6,17 @@
     <p v-if="stores.error" class="text-red-500 text-center">Failed to Get Data</p>
 
     <div v-if="!stores.error && !stores.loading" class="space-y-5">
-      <div class="space-y-1">
+      <div v-if="authStore.token" class="space-y-1">
         <p class="text-secondary">Filter:</p>
         <FilterAnalytic
           v-model:start="filterStore.startDate"
           v-model:end="filterStore.endDate"
         />
+        <InOutTable :items="dataExpense" @delete="handleDelete" @edit="handleEdit" />
       </div>
-      <InOutTable :items="dataExpense" @delete="handleDelete" @edit="handleEdit" />
+      <div v-else>
+        <p class="text-center text-secondary text-xl">Please Login</p>
+      </div>
     </div>
   </div>
 </template>
@@ -26,10 +29,12 @@ import { useRouter } from "vue-router";
 import { Icon } from "@iconify/vue";
 import { useFilterStore } from "../stores/filter.store";
 import FilterAnalytic from "../components/filter/FilterAnalytic.vue";
+import { useAuthStore } from "../stores/auth.store";
 
 const stores = useTransactionStore();
 const filterStore = useFilterStore()
 const router = useRouter()
+const authStore = useAuthStore()
 
 
 const dataExpense = computed(() =>

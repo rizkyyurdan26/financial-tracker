@@ -7,7 +7,10 @@
       <h1 class="font-bold text-2xl mb-5">Register</h1>
 
       <!-- Alert Error dari Supabase (Baru ditambahkan) -->
-      <div v-if="authStore.error" class="bg-red-100 text-red-600 p-3 rounded-lg text-sm text-center font-medium">
+      <div
+        v-if="authStore.error"
+        class="bg-red-100 text-red-600 p-3 rounded-lg text-sm text-center font-medium"
+      >
         {{ authStore.error }}
       </div>
 
@@ -106,11 +109,11 @@
         <span v-else>Register</span>
       </button>
 
-      <!-- Already Account -->
       <p class="text-center text-secondary">
         Already have an account?
-        <!-- Pakai router-link biar gak refresh halaman -->
-        <router-link to="/login" class="text-blue-500 underline">Login</router-link>
+        <router-link to="/login" class="text-blue-500 underline"
+          >Login</router-link
+        >
       </p>
     </div>
   </form>
@@ -121,7 +124,6 @@ import { Icon } from "@iconify/vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/auth.store";
-
 
 // Inisialisasi
 const router = useRouter();
@@ -135,17 +137,19 @@ const isShow = ref(false);
 const isChecked = ref(false);
 
 async function handleRegister() {
-  // Validasi lokal dulu
   if (inputPassword.value !== repeatPassword.value) {
     return alert("Password dan Repeat Password harus sama!");
   }
 
   try {
-    // Panggil fungsi register dari store, masukkan 3 parameter
-    await authStore.register(inputEmail.value, inputPassword.value, inputUsername.value);
-    
+    await authStore.register(
+      inputEmail.value,
+      inputPassword.value,
+      inputUsername.value,
+    );
+
     alert("Register berhasil! Silakan login.");
-    router.push('/login');
+    router.push("/login");
   } catch (error) {
     console.error("Gagal register:", error);
   }

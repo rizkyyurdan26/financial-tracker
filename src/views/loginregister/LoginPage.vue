@@ -79,7 +79,7 @@
         >
       </p>
       <!-- Forgot Password -->
-      <p class="text-center text-blue-400 text-xs -mt-4">
+      <p class="text-center text-blue-400 text-sm -mt-4">
         <router-link to="/forgot-password">Forgot password?</router-link>
       </p>
     </div>

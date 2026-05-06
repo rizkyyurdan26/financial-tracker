@@ -1,17 +1,17 @@
 <template>
   <aside
     :class="[
-    'z-50 flex flex-col border-r border-slate-300 bg-white transition-all duration-300',
+      'z-50 flex flex-col border-r border-slate-300 bg-white transition-all duration-300',
 
-    // Mobile overlay
-    'fixed top-0 left-0 h-dvh md:relative md:h-full',
+      // Mobile overlay
+      'fixed top-0 left-0 h-dvh md:relative md:h-full',
 
-    // MOBILE 
-    isCollapse ? '-translate-x-full md:translate-x-0' : 'translate-x-0',
+      // MOBILE
+      isCollapse ? '-translate-x-full md:translate-x-0' : 'translate-x-0',
 
-    // DESKTOP 
-    isCollapse ? 'md:w-24' : 'md:w-64',
-  ]"
+      // DESKTOP
+      isCollapse ? 'md:w-24' : 'md:w-64',
+    ]"
   >
     <!-- Top -->
     <div :class="[' border-b border-slate-300 p-6.5']">
@@ -92,14 +92,17 @@
 
       <!-- <hr class="text-gray-300" /> -->
       <!-- Name Cart -->
-      <CartUser
-        :is-collapse="isCollapse"
-        profileIcon="ic:baseline-person"
-        logOutIcon="ic:baseline-logout"
-        text="Testing Example name"
-        email="example@mail.com"
-        href="#"
-      />
+      <div class="md:hidden">
+        <CartUser
+          v-if="authStore.token"
+          :is-collapse="isCollapse"
+          profileIcon="ic:baseline-person"
+          logOutIcon="ic:baseline-logout"
+          :text="authStore.user?.user_metadata?.username || 'User'"
+          :email="authStore.user?.email"
+          @logout="handleLogout"
+        />
+      </div>
     </div>
   </aside>
   <div
@@ -114,20 +117,38 @@ import { Icon } from "@iconify/vue";
 import RouterButton from "../common/RouterButton.vue";
 import CartUser from "../card/CartUser.vue";
 import { ref, onMounted, onUnmounted } from "vue";
+import { useAuthStore } from "../../stores/auth.store";
+import { useTransactionStore } from "../../stores/transaction.store";
+import { useRouter } from "vue-router";
 
 // STATE
 const isCollapse = ref(false);
+const authStore = useAuthStore();
+const router = useRouter();
 
-// RESPONSIVE AUTO COLLAPSE
+// Handle Logout
+function handleLogout() {
+  if (confirm("Are your sure logout?")) {
+    authStore.logout();
+    const store = useTransactionStore();
+    store.fetchTransactions();
+    router.push({ name: "dashboard" });
+    autoCloseMobile();
+  } else {
+    return;
+  }
+}
+
+// RESPONSIVE
 const handleResize = () => {
   isCollapse.value = window.innerWidth < 768;
 };
 
 const autoCloseMobile = () => {
-  if (window.innerWidth < 768){
-    isCollapse.value = true
+  if (window.innerWidth < 768) {
+    isCollapse.value = true;
   }
-}
+};
 
 onMounted(() => {
   handleResize();

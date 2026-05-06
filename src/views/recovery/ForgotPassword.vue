@@ -2,7 +2,7 @@
   <div class="flex items-center justify-center h-[100dvh] bg-gradient-to-b from-cyan-700 to-cyan-100">
     <div class="bg-white p-10 rounded-xl space-y-5 m-5 md:max-w-sm w-full">
       <h1 class="font-bold text-2xl">Forgot Password</h1>
-      <p class="text-sm text-slate-500">Masukkan email kamu, kami akan kirimkan link untuk reset password.</p>
+      <p class="text-sm text-slate-500">Enter your registered email</p>
 
       <form @submit.prevent="handleRequestReset" class="space-y-4">
         <div class="flex flex-col gap-2">
@@ -21,12 +21,12 @@
           :disabled="authStore.loading"
           class="w-full bg-cyan-600 text-white p-2 rounded-lg font-semibold hover:scale-105 duration-300 disabled:bg-slate-400"
         >
-          {{ authStore.loading ? 'Mengirim...' : 'Kirim Link Reset' }}
+          {{ authStore.loading ? 'Sending...' : 'Send Recovery Link' }}
         </button>
       </form>
 
       <p class="text-center text-sm">
-        <router-link to="/login" class="text-blue-500 underline">Kembali ke Login</router-link>
+        <router-link to="/login" class="text-blue-500 underline">Back to login</router-link>
       </p>
     </div>
   </div>
@@ -42,7 +42,7 @@ const authStore = useAuthStore();
 async function handleRequestReset() {
   try {
     await authStore.sendResetPasswordEmail(email.value);
-    alert("Email pemulihan telah dikirim! Silakan cek inbox/spam email kamu.");
+    alert("Recovery link has been sent to your email");
   } catch (error) {
     console.error(error);
   }

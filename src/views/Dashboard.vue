@@ -1,5 +1,5 @@
 <template>
-  <div class="px-5 mb-5 h-full flex flex-col">
+  <div class="px-5 mb-5 ">
     <!-- Title -->
     <h1 class="text-2xl font-bold text-secondary flex items-end gap-1">
       Dashboard
@@ -18,7 +18,7 @@
     <!-- Content -->
 
     <div v-if="!store.loading && !store.error">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-5">
         <CartDashboard
           v-for="item in dashStore.allData"
           :key="item.id"
