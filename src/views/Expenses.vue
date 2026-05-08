@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-5 p-5">
-    <h1 class="font-bold text-xl text-secondary flex items-end gap-2">Expanses<Icon icon="mdi:cash-multiple" width="32" class="text-red-400 "/></h1>
+    <h1 class="font-bold text-xl text-secondary flex items-end gap-2">Expenses<Icon icon="mdi:cash-multiple" width="32" class="text-red-400 "/></h1>
   
     <p v-if="stores.loading" class="text-secondary text-center">Loading Data...</p>
     <p v-if="stores.error" class="text-red-500 text-center">Failed to Get Data</p>
@@ -25,7 +25,7 @@
 import { computed, onMounted } from "vue";
 import { useTransactionStore } from "../stores/transaction.store";
 import InOutTable from "../components/ui/InOutTable.vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { Icon } from "@iconify/vue";
 import { useFilterStore } from "../stores/filter.store";
 import FilterAnalytic from "../components/filter/FilterAnalytic.vue";
@@ -34,6 +34,7 @@ import { useAuthStore } from "../stores/auth.store";
 const stores = useTransactionStore();
 const filterStore = useFilterStore()
 const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
 
 
@@ -43,9 +44,9 @@ const dataExpense = computed(() =>
     .sort((a, b) => new Date(b.date) - new Date(a.date))
 );
 
-const handleDelete = async (id) => {
-  if (confirm("Delete this data?")) {
-    await stores.deleteTransaction(id);
+const handleDelete = async (item) => {
+  if (confirm(`Are you sure delete: ${item.category}`)) {
+    await stores.deleteTransaction(item.id);
     if (stores.successDelete) {
       alert("Deleted successfully ✅");
     }
@@ -53,9 +54,8 @@ const handleDelete = async (id) => {
 };
 
 const handleEdit = (item) => {
-  if (confirm("Edit this data?")) {
-    stores.dataEdit = item;
-    router.push("/edit");
+  if (confirm(`Are you sure edit: ${item.category} ?`)) {
+    router.push(`/edit/${item.id}`);
   }
 };
 

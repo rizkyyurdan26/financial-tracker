@@ -51,7 +51,7 @@
 
             <button
               class="bg-red-600 text-white px-3 py-1 rounded-md text-xs hover:scale-105 transition"
-              @click="$emit('delete', item.id)"
+              @click="$emit('delete', item)"
             >
               Delete
             </button>

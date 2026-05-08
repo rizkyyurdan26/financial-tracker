@@ -69,7 +69,7 @@ const routes = [
         meta: { requiresAuth: true }
       },
       {
-        path: "edit",
+        path: "edit/:id",
         name: "edit",
         component: Create,
         meta: { requiresAuth: true }

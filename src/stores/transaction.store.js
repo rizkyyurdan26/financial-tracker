@@ -16,7 +16,7 @@ export const useTransactionStore = defineStore("transaction", () => {
 
   const loadingEdit = ref(false);
   const successEdit = ref(false);
-  const dataEdit = ref(null);
+  
 
   async function fetchTransactions() {
     loading.value = true;
@@ -34,7 +34,7 @@ export const useTransactionStore = defineStore("transaction", () => {
       const data = await transactionService.getAll();
       transactions.value = data;
     } catch (err) {
-      error.value = err.message;
+      error.value = err.response?.data?.message || err.message || "Failed get data"
     } finally {
       loading.value = false;
     }
@@ -54,8 +54,7 @@ export const useTransactionStore = defineStore("transaction", () => {
       successCreate.value = false;
       // console.log(err.response.data);
       error.value =
-        err.response?.data?.error_description ||
-        err.response?.data?.message ||
+        err.response?.data?.message || err.message ||
         "Failed to create";
     } finally {
       loadingCreate.value = false;
@@ -74,7 +73,7 @@ export const useTransactionStore = defineStore("transaction", () => {
       successDelete.value = true;
     } catch (err) {
       successDelete.value = false;
-      error.value = err.response?.data?.message || "Delete Failed";
+      error.value = err.response?.data?.message || err.message || "Delete Failed";
       // console.log(err);
     } finally {
       loadingDelete.value = false;
@@ -88,15 +87,15 @@ export const useTransactionStore = defineStore("transaction", () => {
 
     try {
       const data = await transactionService.edit(id, payload);
-      const idx = transactions.value.findIndex((p) => p.id === id);
+      const idx = transactions.value.findIndex((p) => p.id == id);
 
       if (idx !== -1) {
         transactions.value[idx] = { ...transactions.value[idx], ...payload };
-        successEdit.value = true;
       }
+      successEdit.value = true;
       return data;
     } catch (err) {
-      error.value = err.response?.data?.messege || "Edit Failed";
+      error.value = err.response?.data?.message || err.message || "Edit Failed";
     } finally {
       loadingEdit.value = false;
     }
@@ -112,7 +111,7 @@ export const useTransactionStore = defineStore("transaction", () => {
     successDelete,
     loadingEdit,
     successEdit,
-    dataEdit,
+
     fetchTransactions,
     createTransaction,
     deleteTransaction,

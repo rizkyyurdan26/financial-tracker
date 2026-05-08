@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col p-6 gap-5 w-full">
-    <p v-if="stores.loadingCreate" class="text-secondary text-center">Loading...</p>
+    <p v-if="stores.loadingCreate || stores.loadingEdit" class="text-secondary text-center">Loading...</p>
     <p v-if="stores.error" class="text-red-500 text-center">{{ stores.error }}</p>
 
-    <h1 class="text-secondary text-xl font-semibold">Add Transaction</h1>
+    <h1 class="text-secondary text-xl font-semibold">{{isEdit ? 'Edit Transaction' : 'Add Transaction'}}</h1>
 
     <form @submit.prevent="handleSubmit" class="md:max-w-[50%] space-y-5">
       <CreateSelect
@@ -41,7 +41,7 @@
         type="submit"
         class="bg-primary text-white font-semibold py-1 px-4 rounded hover:cursor-pointer hover:scale-105 transform duration-300"
       >
-        {{ stores.dataEdit ? "Update" : "Create" }}
+        {{ isEdit ? "Update" : "Create" }}
       </button>
     </form>
   </div>
@@ -53,7 +53,7 @@ import CreateForm from "../components/form/CreateForm.vue";
 import CreateSelect from "../components/form/createSelect.vue";
 import { optionExpense, optionIncome, optionType } from "../stores/optionData";
 import { useTransactionStore } from "../stores/transaction.store";
-import { useRouter } from "vue-router";
+import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth.store";
 
 const inputAmount = ref("");
@@ -68,7 +68,11 @@ const dataIncome = optionIncome;
 const dataExpense = optionExpense;
 
 const router = useRouter();
+const route = useRoute()
 const authStore = useAuthStore()
+
+const isEdit = ref(false)
+const isSaved = ref(false)
 
 const optionCategory = computed(() => {
   if (inputType.value === "income") return dataIncome;
@@ -86,16 +90,21 @@ const handleSubmit = async () => {
     user_id: authStore.user.id
   };
 
-  if (stores.dataEdit) {
+  if (isEdit.value) {
     // Edit Mode
     if (confirm("Is Edit Ok?")) {
-      const idx = stores.dataEdit.id;
+      const idx = route.params.id;
       await stores.editTransaction(idx, payload);
       if (stores.successEdit) {
         alert("Edit Successfully ✅");
-        router.push(`/${stores.dataEdit.type}`);
+        isSaved.value = true
+        router.push(`/${inputType.value}`);
+        inputType.value = "";
+        inputAmount.value = "";
+        inputDescription.value = "";
+        inputCategory.value = "";
       }
-    }
+    } else return
   } else {
     // Create Mode
     if (confirm("Is Data Ok?")) {
@@ -104,29 +113,60 @@ const handleSubmit = async () => {
       if (stores.successCreate) {
         alert("Created Successfully ✅");
         router.push(`/${inputType.value}`);
+
+        inputType.value = "";
+        inputAmount.value = "";
+        inputDescription.value = "";
+        inputCategory.value = "";
       }
 
-      inputType.value = "";
-      inputAmount.value = "";
-      inputDescription.value = "";
-      inputCategory.value = "";
     } else return;
   }
 };
 
-onMounted(() => {
-  const editData = stores.dataEdit;
+const handleBeforeUnload = (e) => {
+  if (isEdit.value && !isSaved.value){
+    e.preventDefault();
+    e.retunValue= "Refresh will not save all changes"
+  }
+}
 
-  if (editData) {
-    inputType.value = editData.type;
-    inputCategory.value = editData.category;
-    inputAmount.value = editData.amount;
-    inputDescription.value = editData.description;
-    inputDate.value = editData.date;
+onMounted(async () => {
+  window.addEventListener('beforeunload', handleBeforeUnload)
+  const id = route.params.id
+
+  if (id){
+    isEdit.value = true
+
+    if (stores.transactions.length === 0){
+      await stores.fetchTransactions()
+    }
+
+    const editData = stores.transactions.find(item => item.id == id);
+  
+    if (editData) {
+      inputType.value = editData.type;
+      inputCategory.value = editData.category;
+      inputAmount.value = editData.amount;
+      inputDescription.value = editData.description;
+      inputDate.value = editData.date;
+    } else {
+      alert('Transaction not found')
+      router.push('/')
+    }
   }
 });
 
 onUnmounted(() => {
-  stores.dataEdit = null;
-});
+  window.removeEventListener('beforeunload', handleBeforeUnload)
+})
+
+onBeforeRouteLeave((to, from) => {
+  if (isEdit.value && !isSaved.value){
+    return confirm(
+      "Are you sure leave this page?\nAll changes will not be saved."
+    );
+  }
+})
+
 </script>

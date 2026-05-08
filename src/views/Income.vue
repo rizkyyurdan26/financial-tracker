@@ -35,7 +35,7 @@
 import { computed, onMounted, ref } from "vue";
 import { useTransactionStore } from "../stores/transaction.store";
 import InOutTable from "../components/ui/InOutTable.vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { Icon } from "@iconify/vue";
 import FilterAnalytic from "../components/filter/FilterAnalytic.vue";
 import { useFilterStore } from "../stores/filter.store";
@@ -43,6 +43,7 @@ import { useAuthStore } from "../stores/auth.store";
 
 const stores = useTransactionStore();
 const router = useRouter();
+const route = useRoute()
 const filterStore = useFilterStore();
 const authStore = useAuthStore();
 
@@ -52,9 +53,9 @@ const dataIncome = computed(() =>
     .sort((a, b) => new Date(b.date) - new Date(a.date)),
 );
 
-const handleDelete = async (id) => {
-  if (confirm("Delete this data?")) {
-    await stores.deleteTransaction(id);
+const handleDelete = async (item) => {
+  if (confirm(`Are you sure delete: ${item.category}`)) {
+    await stores.deleteTransaction(item.id);
     if (stores.successDelete) {
       alert("Deleted successfully ✅");
     }
@@ -62,9 +63,8 @@ const handleDelete = async (id) => {
 };
 
 const handleEdit = (item) => {
-  if (confirm("Edit this data?")) {
-    stores.dataEdit = item;
-    router.push("/edit");
+  if (confirm(`Are you sure edit: ${item.category}?`)) {
+    router.push(`/edit/${item.id}`);
   }
 };
 
