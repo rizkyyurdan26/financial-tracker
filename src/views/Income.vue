@@ -21,6 +21,7 @@
           :items="dataIncome"
           @delete="handleDelete"
           @edit="handleEdit"
+          data-sal="slide-up" data-sal-duration="1500"
         />
       </div>
 

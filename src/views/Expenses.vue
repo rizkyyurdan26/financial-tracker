@@ -12,7 +12,7 @@
           v-model:start="filterStore.startDate"
           v-model:end="filterStore.endDate"
         />
-        <InOutTable :items="dataExpense" @delete="handleDelete" @edit="handleEdit" />
+        <InOutTable :items="dataExpense" @delete="handleDelete" @edit="handleEdit" data-sal="slide-up" data-sal-duration="1500"/>
       </div>
       <div v-else>
         <p class="text-center text-secondary text-xl">Please Login</p>

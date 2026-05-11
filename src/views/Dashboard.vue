@@ -1,13 +1,13 @@
 <template>
-  <div class="px-5 mb-5 ">
+  <div class="px-5 lg:mt-5">
     <!-- Title -->
-    <h1 class="text-2xl font-bold text-secondary flex items-end gap-1">
+    <h1 class="text-2xl font-bold text-secondary flex items-end gap-1" data-sal="slide-up" data-sal-duration="2000">
       Dashboard
       <span
         ><Icon icon="ic:sharp-bubble-chart" width="32" class="text-primary"
       /></span>
     </h1>
-    <p class="text-secondary">Welcome back, here is your financial reports</p>
+    <p class="text-secondary"  data-sal="slide-up" data-sal-duration="2000">Welcome back, here is your financial reports</p>
 
     <!-- Loading / Error -->
     <div>
@@ -28,11 +28,13 @@
           :icon-class="item.iconClass"
           :amount="item.amount"
           :percent="item.percent"
+          data-sal="zoom-in"
+          data-sal-duration="1000"
         />
       </div>
 
       <div class="mt-5">
-        <BudgetDashboard />
+        <BudgetDashboard data-sal="zoom-in" data-sal-duration="2000"/>
       </div>
     </div>
   </div>

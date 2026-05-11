@@ -8,9 +8,12 @@
            <p class="text-secondary text-sm">Do you need help?</p>
 
            <div class="mt-5 px-5">
-               <h3 class="text-secondary font-semibold">🔘Forgot Pass
-                word</h3>
-               <p class="text-secondary px-6">You can reset ypur password in Login Page</p>
+               <h3 class="text-secondary font-semibold">🔘Forgot Password?</h3>
+               <p class="text-secondary px-6">You can reset your password in Login Page</p>
+           </div>
+           <div class="mt-5 px-5">
+               <h3 class="text-secondary font-semibold">🔘Feedback</h3>
+               <p class="text-secondary px-6">You can send feedback for collaboration or optimization to: <a href="" @click="handleEmail" class="underline text-blue-600 text-sm">Send Mail</a></p>
            </div>
            
         </div>
@@ -51,6 +54,8 @@
 
 <script setup>
 import { Icon } from '@iconify/vue';
+import { useMail } from '../compossable/useMail';
 
+const handleEmail = useMail
 
 </script>

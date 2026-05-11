@@ -8,7 +8,7 @@
       Loading Data...
     </p>
     <p
-      v-if="store.error"
+      v-else-if="store.error"
       class="text-center text-red-500 text-lg font-semibold"
     >
       Failed to Get Data
@@ -28,11 +28,11 @@
         />
       </div>
 
-      <!-- Pie Chart -->
+      <!-- Chart -->
       <div class="flex flex-col gap-5 mt-5">
-        <BudgetChart />
+        <BudgetChart  data-sal="zoom-in" data-sal-duration="1500"/>
         <ComparisonChart />
-        <CategoryChart />
+        <CategoryChart data-sal="slide-up" data-sal-duration="1500"/>
       </div>
     </div>
   </div>
