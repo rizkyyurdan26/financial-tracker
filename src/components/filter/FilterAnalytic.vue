@@ -1,5 +1,6 @@
 <template>
   <div class="flex items-center gap-2">
+    <!-- Start Date -->
     <input
       type="date"
       v-model="start"
@@ -8,7 +9,7 @@
 
     <span class="text-secondary text-sm">to</span>
 
-    <!-- Input Tanggal Akhir -->
+    <!-- End date -->
     <input
       type="date"
       v-model="end"

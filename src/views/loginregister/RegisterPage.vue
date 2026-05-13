@@ -138,7 +138,7 @@ const isChecked = ref(false);
 
 async function handleRegister() {
   if (inputPassword.value !== repeatPassword.value) {
-    return alert("Password dan Repeat Password harus sama!");
+    return alert("Make sure your password & repeat password!");
   }
 
   try {
@@ -148,10 +148,10 @@ async function handleRegister() {
       inputUsername.value,
     );
 
-    alert("Register berhasil! Silakan login.");
+    alert("Register Success✅\nPlease Login");
     router.push("/login");
   } catch (error) {
-    console.error("Gagal register:", error);
+    console.error("Register failed:", error);
   }
 }
 </script>

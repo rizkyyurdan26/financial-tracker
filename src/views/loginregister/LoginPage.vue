@@ -105,7 +105,7 @@ async function handleLogin() {
     await authStore.login(inputEmail.value, inputPassword.value);
     router.push({ name: "dashboard" });
   } catch (error) {
-    console.error("Gagal Login", error);
+    console.error("Login Failed", error);
   }
 }
 </script>

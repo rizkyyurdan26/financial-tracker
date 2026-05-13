@@ -16,7 +16,6 @@ export const useTransactionStore = defineStore("transaction", () => {
 
   const loadingEdit = ref(false);
   const successEdit = ref(false);
-  
 
   async function fetchTransactions() {
     loading.value = true;
@@ -34,7 +33,8 @@ export const useTransactionStore = defineStore("transaction", () => {
       const data = await transactionService.getAll();
       transactions.value = data;
     } catch (err) {
-      error.value = err.response?.data?.message || err.message || "Failed get data"
+      error.value =
+        err.response?.data?.message || err.message || "Failed get data";
     } finally {
       loading.value = false;
     }
@@ -54,8 +54,7 @@ export const useTransactionStore = defineStore("transaction", () => {
       successCreate.value = false;
       // console.log(err.response.data);
       error.value =
-        err.response?.data?.message || err.message ||
-        "Failed to create";
+        err.response?.data?.message || err.message || "Failed to create";
     } finally {
       loadingCreate.value = false;
     }
@@ -73,7 +72,8 @@ export const useTransactionStore = defineStore("transaction", () => {
       successDelete.value = true;
     } catch (err) {
       successDelete.value = false;
-      error.value = err.response?.data?.message || err.message || "Delete Failed";
+      error.value =
+        err.response?.data?.message || err.message || "Delete Failed";
       // console.log(err);
     } finally {
       loadingDelete.value = false;

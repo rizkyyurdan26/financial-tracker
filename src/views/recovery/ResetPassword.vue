@@ -6,9 +6,7 @@
       class="bg-white p-10 rounded-xl space-y-5 md:max-w-sm w-full shadow-xl"
     >
       <h1 class="font-bold text-2xl text-slate-800">Set New Password</h1>
-      <!-- <p class="text-sm text-slate-500">
-        Gunakan icon mata untuk memastikan password sudah benar.
-      </p> -->
+
 
       <form @submit.prevent="handleUpdatePassword" class="space-y-4">
         <!-- Input New Password  -->
@@ -41,7 +39,7 @@
           </div>
         </div>
 
-        <!-- Input Konfirmasi Password -->
+        <!-- Input Confirm Password -->
         <div class="flex flex-col gap-2">
           <label class="text-sm font-semibold text-slate-700"
             >Confirm New Password</label
@@ -113,7 +111,7 @@ async function handleUpdatePassword() {
 
   try {
     await authStore.updatePassword(p1, token);
-    alert("Success!! The new password has been updated");
+    alert("Success!! The new password has been updated ✅");
     authStore.logout();
     window.location.href = "/login";
   } catch (error) {
