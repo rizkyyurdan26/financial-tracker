@@ -41,11 +41,16 @@ export const useAuthStore = defineStore("auth", () => {
 
       return data;
     } catch (err) {
-      error.value =
+      const supabaseError =
         err.response?.data?.error_description ||
         err.response?.data?.msg ||
-        err.response?.data?.message ||
-        "Login Failed";
+        err.response?.data?.message;
+
+      if (supabaseError === "Invalid login credentials") {
+        error.value = "Incorrect email or password";
+      } else {
+        error.value = supabaseError || "Login Failed";
+      }
       throw err;
     } finally {
       loading.value = false;
