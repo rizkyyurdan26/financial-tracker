@@ -33,8 +33,16 @@ export const useTransactionStore = defineStore("transaction", () => {
       const data = await transactionService.getAll();
       transactions.value = data;
     } catch (err) {
-      error.value =
-        err.response?.data?.message || err.message || "Failed get data";
+      console.error("API Fetch Error, falling back to dummy:", err);
+
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        localStorage.removeItem("access_token"); 
+        transactions.value = dummyData;
+        error.value = null; 
+      } else {
+        error.value =
+          err.response?.data?.message || err.message || "Failed get data";
+      }
     } finally {
       loading.value = false;
     }

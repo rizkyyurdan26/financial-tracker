@@ -17,6 +17,7 @@
           You can reset your password in Login Page
         </p>
       </div>
+      <!-- --------- -->
       <div class="mt-5 px-5">
         <h3 class="text-secondary font-semibold">🔘Feedback</h3>
         <p class="text-secondary px-6">
@@ -26,6 +27,32 @@
             @click="handleEmail"
             class="underline text-blue-600 text-sm"
             >Send Mail</a
+          >
+        </p>
+      </div>
+      <!-- --------- -->
+      <div class="mt-5 px-5">
+        <h3 class="text-secondary font-semibold">🔘Repository</h3>
+        <p class="text-secondary px-6">
+          Fork the code to your own project custom:
+          <a
+            href="https://github.com/rizkyyurdan26/financial-tracker.git"
+            target="_blank"
+            class="underline text-blue-600 text-sm"
+            >Git Repo</a
+          >
+        </p>
+      </div>
+      <!-- --------- -->
+      <div class="mt-5 px-5">
+        <h3 class="text-secondary font-semibold">🔘Blueprint</h3>
+        <p class="text-secondary px-6">
+          You can see MVP blueprint on:
+          <a
+            href="https://drive.google.com/file/d/1a7gzdA4lE7zk-swNTUr9uMS4R_BVIY6r/view?usp=sharing"
+            target="_blank"
+            class="underline text-blue-600 text-sm"
+            >MVP Bussiness Process</a
           >
         </p>
       </div>

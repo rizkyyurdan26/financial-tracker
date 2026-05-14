@@ -1,14 +1,10 @@
-// src/data/dummy.js
-
 const now = new Date();
 const currentMonth = now.getMonth();
 const currentYear = now.getFullYear();
 
-// Tanggal bulan lalu untuk simulasi persentase naik/turun
 const lastMonthDate = new Date(currentYear, currentMonth - 1, 1);
 
 export const dummyData = [
-  // --- DATA BULAN INI ---
   {
     id: "d1",
     type: "income",
@@ -34,7 +30,6 @@ export const dummyData = [
     date: new Date(currentYear, currentMonth, 5).toISOString()
   },
 
-  // --- DATA BULAN LALU (Agar persentase dashboard tidak 0%) ---
   {
     id: "d4",
     type: "income",

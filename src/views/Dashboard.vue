@@ -1,18 +1,26 @@
 <template>
   <div class="px-5 lg:mt-5">
     <!-- Title -->
-    <h1 class="text-2xl font-bold text-secondary flex items-end gap-1" data-sal="slide-up" data-sal-duration="2000">
+    <h1
+      class="text-2xl font-bold text-secondary flex items-end gap-1"
+      data-sal="slide-up"
+      data-sal-duration="2000"
+    >
       Dashboard
       <span
         ><Icon icon="ic:sharp-bubble-chart" width="32" class="text-primary"
       /></span>
     </h1>
-    <p class="text-secondary"  data-sal="slide-up" data-sal-duration="2000">Welcome back, here is your financial reports</p>
+    <p class="text-secondary" data-sal="slide-up" data-sal-duration="2000">
+      Welcome back, here is your financial reports
+    </p>
 
     <!-- Loading / Error -->
     <div>
       <p v-if="store.loading" class="text-secondary text-center">Loading...</p>
-      <p v-if="store.error" class="text-red-500 text-center">Sorry, something error</p>
+      <p v-if="store.error" class="text-red-500 text-center">
+        Sorry, something error
+      </p>
     </div>
 
     <!-- Content -->
@@ -34,7 +42,7 @@
       </div>
 
       <div class="mt-5">
-        <BudgetDashboard data-sal="zoom-in" data-sal-duration="2000"/>
+        <BudgetDashboard data-sal="zoom-in" data-sal-duration="2000" />
       </div>
     </div>
   </div>
@@ -53,6 +61,7 @@ const store = useTransactionStore();
 const dashStore = useDashboardStore();
 
 onMounted(async () => {
+  store.error = null;
   await store.fetchTransactions();
   // console.log(dashStore.totalBalance)
 });
